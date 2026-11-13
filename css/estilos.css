@@ -1,0 +1,100 @@
+/* La Trastienda · hoja común para index.html y carrito.html */
+
+/* ===== Sesión 1: reglas base ===== */
+
+/* 1. Tipografía y color del body */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #2b2118;
+  background-color: #faf6f0;
+}
+
+/* 2. Fondo del header */
+header {
+  padding: 0.75rem 1rem;
+  background-color: #5a2e1a;
+  color: #fff;
+}
+
+/* 3. Color de los enlaces */
+a {
+  color: #a0461f;
+}
+
+header a {
+  color: #fff;
+  font-weight: bold;
+}
+
+main {
+  padding: 0 1rem;
+}
+
+/* ===== Sesión 2: selectores ===== */
+
+/* Barra inferior: lista sin viñetas (hijo directo) */
+nav > ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Pestaña activa: se ilumina sola en cada página gracias a aria-current */
+nav a[aria-current="page"] {
+  color: #a0461f;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Resto de pestañas: gris */
+nav a:not([aria-current="page"]) {
+  color: #6b6158;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #2b2118;
+}
+
+/* Anillo visible al navegar con Tab */
+nav a:focus-visible {
+  outline: 2px solid #a0461f;
+  outline-offset: 2px;
+}
+
+/* Tarjetas de libro */
+.card {
+  background-color: #fff;
+  border: 1px solid #e4d9cc;
+}
+
+/* Primera tarjeta de cada sección: la que va justo después del h2 */
+h2 + .card {
+  border-top: 2px solid #a0461f;
+}
+
+/* Badges: los vacíos no se muestran */
+.badge {
+  background-color: #a0461f;
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.badge:empty {
+  display: none;
+}
+
+/* Tarjetas que tienen un badge con texto */
+article:has(.badge:not(:empty)) {
+  border-color: #a0461f;
+}
+
+/* Botones de solo icono (lupa, menú, − y +) */
+button[aria-label] {
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+}
