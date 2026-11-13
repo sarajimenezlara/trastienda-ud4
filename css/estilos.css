@@ -1,100 +1,124 @@
 /* La Trastienda · hoja común para index.html y carrito.html */
 
-/* ===== Sesión 1: reglas base ===== */
+/*
+  Sesión 3: la hoja se ordena en capas.
+  Prioridad: utilities > components > base
+  (una capa posterior gana aunque su selector sea menos específico).
+  No hay ningún #id ni !important en toda la hoja.
+*/
+@layer base, components, utilities;
 
-/* 1. Tipografía y color del body */
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #2b2118;
-  background-color: #faf6f0;
+/* ===== BASE: estilos generales de etiquetas ===== */
+@layer base {
+  /* Color y tipografía se heredan: se ponen una vez en el body */
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #2b2118;
+    background-color: #faf6f0;
+  }
+
+  /* El fondo NO se hereda: hay que ponerlo en el header */
+  header {
+    padding: 0.75rem 1rem;
+    background-color: #5a2e1a;
+    color: #fff;
+  }
+
+  a {
+    color: #a0461f;
+  }
+
+  /* inherit: el logo usa el mismo color blanco que el header */
+  header a {
+    color: inherit;
+    font-weight: bold;
+  }
+
+  main {
+    padding: 0 1rem;
+  }
 }
 
-/* 2. Fondo del header */
-header {
-  padding: 0.75rem 1rem;
-  background-color: #5a2e1a;
-  color: #fff;
+/* ===== COMPONENTS: barra inferior, tarjetas, badges y botones ===== */
+@layer components {
+  /* Barra inferior */
+  nav > ul {                              /* (0,0,0,2) */
+    list-style: none;
+    padding: 0;
+  }
+
+  nav a:not([aria-current="page"]) {     /* (0,0,1,2): :not() suma su argumento */
+    color: #6b6158;
+    text-decoration: none;
+  }
+
+  nav a[aria-current="page"] {            /* (0,0,1,2) */
+    color: #a0461f;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  /*
+    nav a:hover también es (0,0,1,2): empata con las dos reglas de arriba,
+    así que decide el orden de aparición. Por eso va después.
+  */
+  nav a:hover {
+    color: #2b2118;
+  }
+
+  nav a:focus-visible {
+    outline: 2px solid #a0461f;
+    outline-offset: 2px;
+  }
+
+  /* Tarjetas de libro */
+  .card {
+    background-color: #fff;
+    border: 1px solid #e4d9cc;
+  }
+
+  /* initial: quita el margen que el navegador pone al h3 */
+  .card h3 {
+    margin: initial;
+  }
+
+  h2 + .card {                            /* (0,0,1,1) */
+    border-top: 2px solid #a0461f;
+  }
+
+  /* Badges */
+  .badge {
+    background-color: #a0461f;
+    color: #fff;
+    font-size: 0.75rem;
+  }
+
+  .badge:empty {
+    display: none;
+  }
+
+  /* (0,0,2,1): gana a .card (0,0,1,0) aunque los dos pongan el borde */
+  article:has(.badge:not(:empty)) {
+    border-color: #a0461f;
+  }
+
+  /* Botones de solo icono (lupa, menú, − y +) */
+  button[aria-label] {
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid currentColor;
+    color: inherit;                       /* el color del padre (blanco en el header) */
+    font: revert;                         /* tipografía de botón del navegador */
+  }
 }
 
-/* 3. Color de los enlaces */
-a {
-  color: #a0461f;
-}
-
-header a {
-  color: #fff;
-  font-weight: bold;
-}
-
-main {
-  padding: 0 1rem;
-}
-
-/* ===== Sesión 2: selectores ===== */
-
-/* Barra inferior: lista sin viñetas (hijo directo) */
-nav > ul {
-  list-style: none;
-  padding: 0;
-}
-
-/* Pestaña activa: se ilumina sola en cada página gracias a aria-current */
-nav a[aria-current="page"] {
-  color: #a0461f;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-/* Resto de pestañas: gris */
-nav a:not([aria-current="page"]) {
-  color: #6b6158;
-  text-decoration: none;
-}
-
-nav a:hover {
-  color: #2b2118;
-}
-
-/* Anillo visible al navegar con Tab */
-nav a:focus-visible {
-  outline: 2px solid #a0461f;
-  outline-offset: 2px;
-}
-
-/* Tarjetas de libro */
-.card {
-  background-color: #fff;
-  border: 1px solid #e4d9cc;
-}
-
-/* Primera tarjeta de cada sección: la que va justo después del h2 */
-h2 + .card {
-  border-top: 2px solid #a0461f;
-}
-
-/* Badges: los vacíos no se muestran */
-.badge {
-  background-color: #a0461f;
-  color: #fff;
-  font-size: 0.75rem;
-}
-
-.badge:empty {
-  display: none;
-}
-
-/* Tarjetas que tienen un badge con texto */
-article:has(.badge:not(:empty)) {
-  border-color: #a0461f;
-}
-
-/* Botones de solo icono (lupa, menú, − y +) */
-button[aria-label] {
-  cursor: pointer;
-  background-color: transparent;
-  border: 1px solid currentColor;
-  color: inherit;
+/* ===== UTILITIES: clases de un solo uso, siempre ganan ===== */
+@layer utilities {
+  .text-primary {
+    color: #a0461f;
+    font-weight: 700;
+  }
 }
