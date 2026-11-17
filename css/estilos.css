@@ -1,5 +1,46 @@
 /* La Trastienda · hoja común para index.html y carrito.html */
 
+/* ===== Sesión 4: tokens de diseño (de Figma) ===== */
+:root {
+  /* --- Escala primaria (azul, colores de Figma) --- */
+  --color-primary-50:  #dbe5fc; /* oklch(0.92 0.033 267) */
+  --color-primary-100: #b6cbf8; /* oklch(0.84 0.067 265) */
+  --color-primary-200: #92b1f5; /* oklch(0.76 0.104 265) */
+  --color-primary-300: #6e97f2; /* oklch(0.69 0.142 265) */
+  --color-primary-400: #497dee; /* oklch(0.61 0.179 263) */
+  --color-primary-500: #2563eb; /* oklch(0.55 0.215 263)  color de marca */
+  --color-primary-600: #134ed0; /* oklch(0.48 0.209 263)  hover */
+  --color-primary-700: #0f3ea6; /* oklch(0.41 0.175 263)  active / focus */
+  --color-primary-800: #0b2f7d; /* oklch(0.34 0.138 263) */
+  --color-primary-900: #081f53; /* oklch(0.26 0.099 263) */
+
+  /* --- Escala neutra (grises de Figma) --- */
+  --color-neutral-50:  #f7f8f9; /* oklch(0.98 0.002 248)  fondo de pantalla */
+  --color-neutral-100: #eff0f3; /* oklch(0.96 0.004 271) */
+  --color-neutral-200: #e8e9ec; /* oklch(0.93 0.004 271)  bordes */
+  --color-neutral-300: #e0e2e6; /* oklch(0.91 0.006 265) */
+  --color-neutral-400: #d8dae0; /* oklch(0.89 0.008 271) */
+  --color-neutral-500: #d0d3da; /* oklch(0.87 0.010 267) */
+  --color-neutral-600: #a8aebb; /* oklch(0.75 0.020 266) */
+  --color-neutral-700: #81899b; /* oklch(0.63 0.029 266) */
+  --color-neutral-800: #5e6577; /* oklch(0.51 0.030 269)  texto secundario (contraste 5,8:1 sobre blanco) */
+  --color-neutral-900: #3f444f; /* oklch(0.39 0.020 266)  texto principal (contraste 9,8:1 sobre blanco) */
+
+  /* --- Acento definido directamente en oklch (badge «Más vendido») --- */
+  --color-accent-oklch: oklch(0.72 0.17 55); /* naranja ≈ #f3821d */
+
+  /* --- Variables semánticas: para qué se usa cada color --- */
+  --bg-page:       var(--color-neutral-50);
+  --bg-card:       #ffffff;
+  --bg-header:     var(--color-primary-700);
+  --text-main:     var(--color-neutral-900);
+  --text-muted:    var(--color-neutral-800);
+  --text-on-brand: #ffffff;
+  --border-subtle: var(--color-neutral-200);
+  --brand:         var(--color-primary-500);
+  --brand-hover:   var(--color-primary-600);
+}
+
 /*
   Sesión 3: la hoja se ordena en capas.
   Prioridad: utilities > components > base
@@ -16,25 +57,25 @@
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     font-size: 1rem;
     line-height: 1.5;
-    color: #2b2118;
-    background-color: #faf6f0;
+    color: var(--text-main);
+    background-color: var(--bg-page);
   }
 
   /* El fondo NO se hereda: hay que ponerlo en el header */
   header {
     padding: 0.75rem 1rem;
-    background-color: #5a2e1a;
-    color: #fff;
+    background-color: var(--bg-header);
+    color: var(--text-on-brand);
+
+    /* inherit: el logo usa el mismo color que el header */
+    a {
+      color: inherit;
+      font-weight: bold;
+    }
   }
 
   a {
-    color: #a0461f;
-  }
-
-  /* inherit: el logo usa el mismo color blanco que el header */
-  header a {
-    color: inherit;
-    font-weight: bold;
+    color: var(--brand);
   }
 
   main {
@@ -44,65 +85,99 @@
 
 /* ===== COMPONENTS: barra inferior, tarjetas, badges y botones ===== */
 @layer components {
-  /* Barra inferior */
-  nav > ul {                              /* (0,0,0,2) */
-    list-style: none;
-    padding: 0;
+  /* Barra inferior con anidamiento nativo */
+  nav {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-subtle);
+
+    ul {                                  /* nav ul */
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    a {                                   /* nav a  (0,0,0,2) */
+      color: var(--text-muted);
+      text-decoration: none;
+
+      &[aria-current="page"] {            /* nav a[aria-current="page"]  (0,0,1,2) */
+        color: var(--brand);
+        font-weight: 700;
+      }
+
+      &:hover {                           /* nav a:hover  (0,0,1,2): va después, gana el empate */
+        color: var(--text-main);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--brand);
+        outline-offset: 2px;
+      }
+    }
   }
 
-  nav a:not([aria-current="page"]) {     /* (0,0,1,2): :not() suma su argumento */
-    color: #6b6158;
-    text-decoration: none;
-  }
-
-  nav a[aria-current="page"] {            /* (0,0,1,2) */
-    color: #a0461f;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  /*
-    nav a:hover también es (0,0,1,2): empata con las dos reglas de arriba,
-    así que decide el orden de aparición. Por eso va después.
-  */
-  nav a:hover {
-    color: #2b2118;
-  }
-
-  nav a:focus-visible {
-    outline: 2px solid #a0461f;
-    outline-offset: 2px;
-  }
-
-  /* Tarjetas de libro */
+  /* Tarjeta de libro: solo variables semánticas */
   .card {
-    background-color: #fff;
-    border: 1px solid #e4d9cc;
-  }
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
 
-  /* initial: quita el margen que el navegador pone al h3 */
-  .card h3 {
-    margin: initial;
-  }
+    /* Primera tarjeta de cada sección (h2 + .card) */
+    h2 + & {
+      border-top: 2px solid var(--brand);
+    }
 
-  h2 + .card {                            /* (0,0,1,1) */
-    border-top: 2px solid #a0461f;
+    /* Tarjetas con un badge con texto */
+    &:has(.badge:not(:empty)) {
+      border-color: var(--brand);
+    }
+
+    /* initial: quita el margen que el navegador pone al h3 */
+    h3 {
+      margin: initial;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+          color: var(--brand);
+        }
+      }
+    }
+
+    .card-author {
+      color: var(--text-muted);
+    }
+
+    .card-price {
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    /* Botón «Añadir a la cesta» */
+    button {
+      background-color: var(--brand);
+      color: var(--text-on-brand);
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--brand-hover);
+      }
+    }
   }
 
   /* Badges */
   .badge {
-    background-color: #a0461f;
-    color: #fff;
+    background-color: var(--color-accent-oklch);
+    color: var(--color-primary-900);      /* texto muy oscuro: el naranja es claro (L 0.72) */
     font-size: 0.75rem;
-  }
+    font-weight: 600;
 
-  .badge:empty {
-    display: none;
-  }
-
-  /* (0,0,2,1): gana a .card (0,0,1,0) aunque los dos pongan el borde */
-  article:has(.badge:not(:empty)) {
-    border-color: #a0461f;
+    &:empty {
+      display: none;
+    }
   }
 
   /* Botones de solo icono (lupa, menú, − y +) */
@@ -118,7 +193,7 @@
 /* ===== UTILITIES: clases de un solo uso, siempre ganan ===== */
 @layer utilities {
   .text-primary {
-    color: #a0461f;
+    color: var(--brand);
     font-weight: 700;
   }
 }
