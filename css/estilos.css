@@ -40,6 +40,18 @@
   --border-subtle: var(--color-neutral-200);
   --brand:         var(--color-primary-500);
   --brand-hover:   var(--color-primary-600);
+
+  /* ===== Sesión 5: tipografía ===== */
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Escala tipográfica de Figma (tamaño / interlineado en px), en rem (1rem = 16 px por defecto) */
+  --text-xs:   0.75rem;   /* Caption     · text-xs/regular   · 12 / 16 */
+  --text-sm:   0.875rem;  /* Body Small  · text-sm/regular   · 14 / 20 */
+  --text-base: 1rem;      /* Body: text-base/regular · H3: text-base/bold · 16 / 24 */
+  --text-xl:   1.25rem;   /* H2          · text-xl/bold      · 20 / 28 */
+  --text-2xl:  1.5rem;    /* H1          · text-2xl/bold     · 24 / 32 */
+  --text-4xl:  2.25rem;   /* Display     · text-4xl/bold     · 36 / 40 */
 }
 
 /*
@@ -55,11 +67,43 @@
   /* Color y tipografía se heredan: se ponen una vez en el body */
   body {
     margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    font-size: 1rem;
-    line-height: 1.5;
+    min-height: 100dvh;                   /* pantalla completa del móvil, sin desbordar las barras */
+    font-family: var(--font-body);
+    font-size: 1rem;                      /* 16 px base, respeta el tamaño que elija el usuario */
+    font-weight: 400;
+    line-height: 1.5;                     /* sin unidad: cada texto lo multiplica por su tamaño */
     color: var(--text-main);
     background-color: var(--bg-page);
+  }
+
+  /* Titulares: fuente display, compactos y sin palabras huérfanas */
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  h1 {                                    /* H1: text-2xl/bold · 24/32 */
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    line-height: 1.333;                   /* 32 / 24 = 1.333, sin unidad */
+  }
+
+  h2 {                                    /* H2: text-xl/bold · 20/28 */
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: 1.4;                     /* 28 / 20 */
+  }
+
+  h3 {                                    /* H3: text-base/bold · 16/24 */
+    font-size: var(--text-base);
+    font-weight: 700;
+    line-height: 1.5;                     /* 24 / 16 */
+  }
+
+  /* Párrafos explicativos: longitud de lectura cómoda */
+  .intro {
+    max-width: 65ch;
   }
 
   /* El fondo NO se hereda: hay que ponerlo en el header */
@@ -99,6 +143,8 @@
 
     a {                                   /* nav a  (0,0,0,2) */
       color: var(--text-muted);
+      font-size: var(--text-sm);          /* Body Small: text-sm/regular · 14/20 */
+      line-height: 1.429;                 /* 20 / 14 */
       text-decoration: none;
 
       /* Sesión 2: todas las pestañas salvo la activa, en gris */
@@ -147,8 +193,10 @@
       }
     }
 
-    .card-author {
+    .card-author {                        /* Body Small */
       color: var(--text-muted);
+      font-size: var(--text-sm);
+      line-height: 1.429;                 /* 20 / 14 */
     }
 
     .card-price {
@@ -162,6 +210,8 @@
       color: var(--text-on-brand);
       border: none;
       cursor: pointer;
+      font: inherit;                      /* Body: 16 px de la fuente del texto */
+      padding: 0.5em 1em;                 /* em: el relleno escala con el texto del botón */
 
       &:hover {
         background-color: var(--brand-hover);
@@ -178,8 +228,10 @@
   .badge {
     background-color: var(--color-accent-oklch);
     color: var(--text-on-accent);         /* texto muy oscuro: el naranja es claro (L 0.72) */
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: var(--text-xs);            /* Caption: text-xs/regular · 12/16 */
+    font-weight: 400;
+    line-height: 1.333;                   /* 16 / 12 */
+    padding: 0.25em 0.5em;                /* em: el relleno escala con el texto del badge */
 
     &:empty {
       display: none;
